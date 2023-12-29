@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input } from "./components/Input";
+import { Input } from "@/app/components/Input";
 import { FormImc, formImcSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { calcIMC } from "./helpers/calcIMC";
+import { calcIMC } from "@/helpers/calcIMC";
 import { resultsIMC } from "@/data/resultsIMC";
-import { CardItem } from "./components/CardItem";
+import { CardItem } from "@/app/components/CardItem";
 import { ResultIMC } from "@/types/ResultsIMC";
-import { BackButton } from "./components/BackButton";
+import { BackButton } from "@/app/components/BackButton";
 
 export default function Home() {
     const [results, setResults] = useState({
@@ -16,24 +16,24 @@ export default function Home() {
         message: "",
     });
     const [resultItem, setResultItem] = useState<ResultIMC>();
-    const { handleSubmit, control, resetField } = useForm<FormImc>({
+    const { handleSubmit, control } = useForm<FormImc>({
         resolver: zodResolver(formImcSchema),
     });
 
     const handleCalcImc = (data: FormImc) => {
         const imc = calcIMC(data.height, data.weight);
         if (imc > 0 && imc <= 18.5) {
-            const item = resultsIMC.find((item) => item.title === "Magreza");
-            setResultItem(item);
+            setResultItem(resultsIMC.find((item) => item.title === "Magreza"));
         } else if (imc > 18.5 && imc <= 24.9) {
-            const item = resultsIMC.find((item) => item.title === "Normal");
-            setResultItem(item);
+            setResultItem(resultsIMC.find((item) => item.title === "Normal"));
         } else if (imc > 24.9 && imc <= 30) {
-            const item = resultsIMC.find((item) => item.title === "Sobrepeso");
-            setResultItem(item);
+            setResultItem(
+                resultsIMC.find((item) => item.title === "Sobrepeso")
+            );
         } else {
-            const item = resultsIMC.find((item) => item.title === "Obesidade");
-            setResultItem(item);
+            setResultItem(
+                resultsIMC.find((item) => item.title === "Obesidade")
+            );
         }
         setResults({
             message: `Seu IMC é de ${imc.toFixed(2)} kg/m²`,
@@ -56,7 +56,6 @@ export default function Home() {
                         adotado pela Organização Mundial de Saúde para calcular
                         o peso ideal para cada pessoa.
                     </p>
-
                     <div className="mt-auto">
                         <form
                             className="flex flex-col gap-4"
@@ -86,7 +85,11 @@ export default function Home() {
                     {!results.show && (
                         <div className="h-full grid grid-cols-2 gap-6">
                             {resultsIMC.map((item) => (
-                                <CardItem isFinalResult={false} item={item} />
+                                <CardItem
+                                    key={item.id}
+                                    isFinalResult={false}
+                                    item={item}
+                                />
                             ))}
                         </div>
                     )}

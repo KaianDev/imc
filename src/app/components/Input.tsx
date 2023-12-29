@@ -1,14 +1,12 @@
-"use client";
-
 import { FormImc } from "@/utils/schemas";
 import { UseControllerProps, useController } from "react-hook-form";
 
 interface IInput extends UseControllerProps<FormImc> {
-    placeholder?: string;
-    disabled?: boolean;
+    placeholder: string;
+    disabled: boolean;
 }
 
-export const Input = ({ ...props }: IInput) => {
+export const Input = ({ placeholder, disabled, ...props }: IInput) => {
     const { field, fieldState } = useController(props);
 
     return (
@@ -17,10 +15,10 @@ export const Input = ({ ...props }: IInput) => {
                 {...field}
                 type="number"
                 min={1}
-                placeholder={props.placeholder}
-                className={`p-2 border-b-2 outline-none text-lg w-full block bg-slate-200 
+                placeholder={placeholder}
+                className={`p-2 border-b-2 outline-none text-lg w-full block bg-slate-200
                 ${fieldState.error && "border-red-500"}`}
-                disabled={props.disabled}
+                disabled={disabled}
                 value={field.value}
                 step={0.01}
                 onChange={(e) => field.onChange(parseFloat(e.target.value))}
